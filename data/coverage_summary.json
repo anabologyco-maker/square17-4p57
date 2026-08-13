@@ -1,0 +1,9 @@
+{
+  "cells": 87033,
+  "runs": 118392770,
+  "minimum_arrangement_coverage": 0,
+  "ok": true,
+  "sum_chunk_seconds": 75.00742,
+  "max_chunk_seconds": 8.76307,
+  "chunks": 18
+}

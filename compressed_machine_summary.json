@@ -1,0 +1,37 @@
+{
+  "status": "internally exact computer-assisted proof candidate; external review pending",
+  "side": "457/100",
+  "side_decimal": 4.57,
+  "certificate": {
+    "orbits": 52,
+    "atoms": 408,
+    "coordinate_grid_denominator": 400,
+    "weight_denominator": 1000000000000,
+    "mass_numerator": 16998202682064,
+    "mass": 16.998202682064,
+    "slack_below_17": 0.001797317936
+  },
+  "events": {
+    "raw": 736703,
+    "bernstein_discarded": 648661,
+    "sturm_input": 88042,
+    "root_incidences": 87125,
+    "distinct_interior_roots": 87032,
+    "orientation_cells": 87033
+  },
+  "automaton": {
+    "feedback_rounds": 2,
+    "initial_minimum_coverage": 0.983600177056,
+    "intermediate_minimum_coverage": 0.996728583330,
+    "final_unique_minimum_states": 1,
+    "final_minimum_coverage": 1.000400000008,
+    "runtime_seconds": 26.809722905
+  },
+  "coverage": {
+    "open_cells": 87033,
+    "subthreshold_runs": 118392770,
+    "failures": 0,
+    "summed_chunk_seconds": 75.00742,
+    "endpoint_pass": true
+  }
+}

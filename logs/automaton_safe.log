@@ -1,0 +1,13 @@
+atoms=408 samples=87033 threads=8
+done 0 sec=0.00143092
+done 10000 sec=2.65961
+done 20000 sec=5.4503
+done 30000 sec=8.38854
+done 40000 sec=11.2414
+done 50000 sec=14.1522
+done 60000 sec=17.0826
+done 70000 sec=20.0535
+done 80000 sec=23.0416
+samples=87033 unique_patterns=1 runs=1 global_min=1000400000008 at=0 total_slabs=68076219 sec=26.8097
+hamming 0 87032
+wall=27.09 cpu=391% maxrss=14896KB

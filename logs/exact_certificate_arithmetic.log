@@ -1,0 +1,11 @@
+orbit_representatives=52
+expanded_atoms=408
+grid_denominator=400
+weight_denominator=1000000000000
+exact_total_mass_numerator=16998202682064
+exact_total_mass=16.998202682064
+exact_mass_slack_numerator=1797317936
+exact_mass_slack=0.001797317936
+orbit_table_sha256=420042caa03bab6485368d04f0da7088c58be28201ce6d622106a3803f114dd7
+expanded_atoms_sha256=813fa1f616e08d054d769e2f1ea944b12a8ed6d33ec83a978797b941550aa2ea
+EXACT CERTIFICATE ARITHMETIC PASS

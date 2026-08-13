@@ -1,0 +1,16 @@
+{
+  "atoms": 408,
+  "samples": 87033,
+  "unique_min_patterns": 1,
+  "pattern_runs": 1,
+  "global_min_weight_num": 1000400000008,
+  "global_min_sample": 0,
+  "global_min_t": 0.000359011354289,
+  "global_min_theta": 0.0007180226777295562,
+  "global_min_center": [0.50035888241888049, 0.50035888241888049],
+  "total_slabs": 68076219,
+  "seconds": 26.809722905000058,
+  "hamming_histogram": {
+    "0": 87032
+  }
+}

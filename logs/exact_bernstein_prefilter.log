@@ -1,0 +1,10 @@
+raw_polynomials=736703
+exactly_discarded=648661
+filtered_polynomials=88042
+max_abs_bernstein_numerator=55852634809956
+arithmetic=exact_unbounded_integers
+int64_headroom_factor=165137.6
+filtered_file_match=1
+raw_sha256=d9e34a7644d5501e952d486c6ea776c5a5216a3598212a6a2c09a1f696345db7
+filtered_sha256=ed2f2d23f3575422ac39a88a6419d3108c1d4d0caad7ebfa769e9dc9983ee3b7
+EXACT BERNSTEIN PREFILTER PASS
