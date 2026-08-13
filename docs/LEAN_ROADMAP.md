@@ -1,7 +1,10 @@
 # Toward a Lean certificate
 
 This note scopes what it would take to turn the 4.57 certificate into a Lean 4 / mathlib
-formalization, and which route we would actually recommend. Nothing here is formalized yet.
+formalization, and which route we would actually recommend. **Status update:** the Layer 3
+work has started in `../lean/` — certificate arithmetic, both endpoint audits, and the
+per-orientation coverage audit are now kernel-accepted `native_decide` theorems (see
+`../lean/README.md`). Layers 1 and 2 remain unformalized.
 
 ## The proof splits into three layers
 

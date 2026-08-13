@@ -1,0 +1,12 @@
+name = "square17"
+defaultTargets = ["Square17"]
+
+[[lean_lib]]
+name = "Square17"
+
+[[lean_lib]]
+name = "FullTheorem"
+
+[[lean_exe]]
+name = "fullrun"
+root = "Main"

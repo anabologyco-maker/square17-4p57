@@ -46,7 +46,10 @@ set.
 - `docs/INDEPENDENT_AUDIT.md` — results of an independent line-by-line audit and
   cross-checks (2026-08-13).
 - `docs/SCALING.md` — compression statistics and stage timings.
-- `docs/LEAN_ROADMAP.md` — scoping notes for a future Lean formalization.
+- `docs/LEAN_ROADMAP.md` — scoping notes for the Lean formalization.
+- `lean/` — Lean 4 formalization of the finite computation layer (certificate
+  arithmetic, both endpoint audits, and the per-orientation coverage audit as
+  kernel-accepted `native_decide` theorems); see `lean/README.md` for status.
 - `src/`, `scripts/`, `verify_all.sh` — the verification chain.
 - `data/` — certificate, event polynomials, orientation samples, bundled results.
 - `logs/` — reference logs from the release environment.
