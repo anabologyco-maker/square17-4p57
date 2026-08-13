@@ -2,17 +2,13 @@
 
 Let `C=[0,457/100]^2`. The certificate is a nonnegative atomic measure `mu` on `C` with exact mass
 
-\[
-\mu(C)=\frac{16,998,202,682,064}{10^{12}}=16.998202682064<17.
-\]
+$$\mu(C)=\frac{16{,}998{,}202{,}682{,}064}{10^{12}}=16.998202682064<17.$$
 
 The finite audit proves that every closed unit square `Q` contained in `C`, at every orientation, satisfies `mu(Q)>=1`.
 
 If seventeen pairwise interior-disjoint unit squares fit in any smaller container, embed that container strictly inside `C` and apply an arbitrarily small generic common translation so no certificate atom lies on a packed-square boundary. The seventeen squares then capture disjoint atom sets, giving
 
-\[
-17\le\sum_{i=1}^{17}\mu(Q_i)\le\mu(C)<17,
-\]
+$$17\le\sum_{i=1}^{17}\mu(Q_i)\le\mu(C)<17,$$
 
 a contradiction.
 

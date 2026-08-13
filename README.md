@@ -2,13 +2,11 @@
 
 This package contains an internally exact, finite computer-assisted proof candidate for
 
-\[
-\boxed{s(17)\ge 4.57=\frac{457}{100}}
-\]
+$$\boxed{\,s(17)\ \ge\ 4.57 = \tfrac{457}{100}\,}$$
 
 i.e. no 17 pairwise interior-disjoint unit squares fit in a square of side less than 4.57.
 The best known packing of 17 unit squares (Bidwell) has side ≈ 4.6756; the trivial area
-lower bound is \(\sqrt{17}\approx 4.1231\).
+lower bound is $\sqrt{17}\approx 4.1231$.
 
 The certificate is a nonnegative atomic measure with 52 dihedral support orbits,
 408 expanded atoms, coordinates in `(1/400) Z^2`, weights in `(1/10^12) Z`, and exact mass
@@ -58,6 +56,14 @@ set.
 `src/automaton_min_sweep.cpp` are the floating-point exploratory tools used to construct
 and compress the certificate. They are **not** invoked by `verify_all.sh` and nothing in
 the proof depends on them; they are included for provenance.
+
+## Provenance
+
+- **Proof and pipeline**: found and constructed by GPT 5.6 Sol Pro (OpenAI).
+- **Independent audit**: Claude Fable 5 (Anthropic) — line-by-line review plus three
+  isolated adversarial agent audits; see `docs/INDEPENDENT_AUDIT.md`.
+- **Release compilation**: Claude Fable 5.
+- **External human peer review**: pending.
 
 ## Review status
 

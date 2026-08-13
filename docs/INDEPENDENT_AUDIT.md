@@ -1,9 +1,11 @@
 # Independent audit record — 2026-08-13
 
 This document records an audit of the package performed after the v0.1.0 archive was
-produced, before public release. **Transparency note:** the audits below were performed
-by AI systems (Claude, Anthropic) — one primary auditor session plus three isolated agent
-sessions with no shared code or state, each given a different adversarial brief. They are
+produced, before public release. **Transparency note:** the proof and pipeline being
+audited were found and constructed by GPT 5.6 Sol Pro (OpenAI); the audits below were
+performed by a different AI system (Claude Fable 5, Anthropic) — one primary auditor
+session plus three isolated agent sessions with no shared code or state, each given a
+different adversarial brief. They are
 *independent implementations and derivations*, but they are not human peer review, which
 this package still requires.
 
