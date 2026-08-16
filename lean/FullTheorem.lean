@@ -1,5 +1,5 @@
 /-
-The full-set coverage theorem: all 87,033 audited orientations pass the exact
+The full-set coverage theorem: all 148,937 audited orientations pass the exact
 coverage check in Lean. Kept out of the default build target because its
 `native_decide` evaluation replays the entire coverage audit (an expensive,
 single-threaded computation). Build with:

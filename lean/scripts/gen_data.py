@@ -16,7 +16,7 @@ def sha(p):
 
 atoms_csv = root / 'data/atoms.csv'
 rows = list(csv.DictReader(open(atoms_csv)))
-assert len(rows) == 408
+assert len(rows) == 560
 atom_lines = "\n".join(f"{int(r['X'])} {int(r['Y'])} {int(r['weight_num'])}" for r in rows)
 (lean / 'Square17/AtomData.lean').write_text(
     f"-- Generated from data/atoms.csv (sha256 {sha(atoms_csv)}). Do not edit.\n"
@@ -28,12 +28,12 @@ atom_lines = "\n".join(f"{int(r['X'])} {int(r['Y'])} {int(r['weight_num'])}" for
 
 samples_tsv = root / 'data/orientation_samples.tsv'
 samples = [line.split() for line in open(samples_tsv) if line.strip()]
-assert len(samples) == 87033
-subset_idx = sorted(set(range(0, 87033, 1000)) | {1, 87031, 87032})
+assert len(samples) == 148937
+subset_idx = sorted(set(range(0, 148937, 1000)) | {1, 148935, 148936})
 subset_lines = "\n".join(f"{samples[i][0]} {samples[i][1]}" for i in subset_idx)
 (lean / 'Square17/SampleData.lean').write_text(
     f"-- Generated from data/orientation_samples.tsv (sha256 {sha(samples_tsv)}).\n"
-    f"-- Subset: indices 0,1000,...,87000 plus 1, 87031, 87032 ({len(subset_idx)} samples).\n"
+    f"-- Subset: indices 0,1000,...,148000 plus 1, 148935, 148936 ({len(subset_idx)} samples).\n"
     "namespace Square17\n\n"
     f"def sampleSubsetCount : Nat := {len(subset_idx)}\n\n"
     f"def sampleSubsetData : String := \"{subset_lines.replace(chr(10), chr(92) + 'n')}\"\n\n"
@@ -41,9 +41,9 @@ subset_lines = "\n".join(f"{samples[i][0]} {samples[i][1]}" for i in subset_idx)
 
 full_lines = "\n".join(f"{p} {q}" for p, q in samples)
 (lean / 'Square17/SampleDataFull.lean').write_text(
-    f"-- Generated from data/orientation_samples.tsv (sha256 {sha(samples_tsv)}). All 87033 samples.\n"
+    f"-- Generated from data/orientation_samples.tsv (sha256 {sha(samples_tsv)}). All 148937 samples.\n"
     "namespace Square17\n\n"
-    "def sampleFullCount : Nat := 87033\n\n"
+    "def sampleFullCount : Nat := 148937\n\n"
     f"def sampleFullData : String := \"{full_lines.replace(chr(10), chr(92) + 'n')}\"\n\n"
     "end Square17\n")
 

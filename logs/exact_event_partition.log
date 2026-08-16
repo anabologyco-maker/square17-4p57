@@ -1,3 +1,4 @@
-located_incidences=87125 seconds=4.27739
-root_gaps=87032 gcd_checks=87125 common=1 seconds=3.74112
+polynomials=150531 samples=148937 expected_roots=148936
+located_incidences=149049 seconds=2.99797
+root_gaps=148936 gcd_checks=149049 common=1 seconds=2.31568
 EXACT EVENT PARTITION PASS

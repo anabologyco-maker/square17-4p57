@@ -1,24 +1,24 @@
 # Lean certificate (work in progress)
 
-Lean 4 formalization of the finite computation layer of the s(17) ≥ 4.57 proof.
+Lean 4 formalization of the finite computation layer of the s(17) ≥ 4.5705 proof.
 Toolchain: Lean 4.33.0, no external dependencies (mathlib not yet required).
 
 ## What is proved in Lean today
 
 All checkers are self-contained exact `Int` computations in
 `Square17/Checker.lean`, with independently derived geometry (documented
-inline; cross-check `../docs/EVENTS.md`). Data modules are generated from the
+inline; cross-check `../docs/PROOF.md`). Data modules are generated from the
 release data files by `scripts/gen_data.py` with pinned sha256s, and re-parsed
 inside Lean by a poisoned parser (malformed input can only cause checks to
 *fail*).
 
 | Theorem | Statement | Replaces | Status |
 |---|---|---|---|
-| `certificate_ok` | 408 atoms on-grid, nonnegative, duplicate-free, exactly D4-symmetric, mass = 16998202682064 < 17·10¹² | `check_certificate.py` | ✅ proved |
+| `certificate_ok` | 560 atoms on-grid, nonnegative, duplicate-free, exactly D4-symmetric, mass = 16994734834452 < 17·10¹² | `check_certificate.py` | ✅ proved |
 | `theta0_coverage_ok` | every open cell of the θ=0 arrangement inside the feasible box has coverage ≥ 10¹² | `verify_endpoints.cpp` (θ=0) | ✅ proved |
 | `quarter_turn_coverage_ok` | θ=π/4 audit in exact ℤ[√2]: every subthreshold run is separated from the feasible diamond | `verify_endpoints.cpp` (θ=π/4) | ✅ proved |
-| `sample_subset_coverage_ok` | the audited coverage property at a 91-sample subset of the 87,033 orientations | `verify_coverage_segment.cpp` (subset) | ✅ proved |
-| `sample_full_coverage_ok` | same at **all 87,033** audited orientations | `verify_coverage_segment.cpp` (full) | `FullTheorem.lean`, ~2h `native_decide` build |
+| `sample_subset_coverage_ok` | the audited coverage property at a 152-sample subset of the 148,937 orientations | `verify_coverage_segment.cpp` (subset) | ✅ proved |
+| `sample_full_coverage_ok` | same at **all 148,937** audited orientations | `verify_coverage_segment.cpp` (full) | `FullTheorem.lean`, multi-hour `native_decide` build |
 
 Build the default target (fast, includes the first four theorems):
 
@@ -49,16 +49,18 @@ the theorems are about the embedded data, and the embedded data is pinned to
 
 ## What is NOT yet formalized (the "modulo" part)
 
-1. **Event completeness + partition layer** — that the 87,033 sampled
-   orientations cover all orientations: Bernstein prefilter, Sturm root
-   partition (`exact_sturm.hpp`, `verify_event_partition.cpp`), and the
-   `docs/EVENTS.md` stability theorem. Next concrete step: Lean Sturm chains
-   over `Int` polynomials and a replay of the gap partition (data-heavy but
-   mechanical); the stability theorem itself is the research-level part.
+1. **Event completeness + partition layer** — that the 148,937 sampled
+   orientations cover all orientations: Bernstein prefilter (1,194,331 of the
+   1,344,862 raw event polynomials discarded exactly), Sturm root partition of
+   the remaining 150,531 (`exact_sturm.hpp`, `verify_event_partition.cpp`),
+   and the event-stability theorem in `docs/PROOF.md`. Next concrete step:
+   Lean Sturm chains over `Int` polynomials and a replay of the gap partition
+   (data-heavy but mechanical); the stability theorem itself is the
+   research-level part.
 2. **The measure argument** — from the finite audit to "no 17 unit squares in
-   side < 4.57". Needs mathlib (ℝ, geometry, a null-set translation lemma).
+   side < 4.5705". Needs mathlib (ℝ, geometry, a null-set translation lemma).
    Planned as a separate mathlib-dependent package so this core stays
    dependency-free.
 
-See `../docs/LEAN_ROADMAP.md` for the full plan and the honest assessment of
-each layer's difficulty.
+The corresponding roadmap for the earlier 4.57 release
+(`docs/LEAN_ROADMAP.md` there) applies to this layer unchanged.

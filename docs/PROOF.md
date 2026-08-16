@@ -1,23 +1,154 @@
 # Proof outline
 
-Let `C=[0,457/100]^2`. The certificate is a nonnegative atomic measure `mu` on `C` with exact mass
+## Theorem
 
-$$\mu(C)=\frac{16{,}998{,}202{,}682{,}064}{10^{12}}=16.998202682064<17.$$
+Let \(s(17)\) be the infimum side length of a square containing seventeen pairwise interior-disjoint unit squares of arbitrary orientations. The bundled certificate proves, conditional only on verifier correctness,
 
-The finite audit proves that every closed unit square `Q` contained in `C`, at every orientation, satisfies `mu(Q)>=1`.
+\[
+s(17)\ge \frac{9141}{2000}=4.5705.
+\]
 
-If seventeen pairwise interior-disjoint unit squares fit in any smaller container, embed that container strictly inside `C` and apply an arbitrarily small generic common translation so no certificate atom lies on a packed-square boundary. The seventeen squares then capture disjoint atom sets, giving
+## Weighted obstruction lemma
 
-$$17\le\sum_{i=1}^{17}\mu(Q_i)\le\mu(C)<17,$$
+Let \(C=[0,S]^2\), and let \(\mu\) be a finite nonnegative atomic measure on \(C\). Assume
+
+\[
+\mu(C)<17
+\]
+
+and every closed unit square \(Q\subseteq C\) satisfies
+
+\[
+\mu(Q)\ge1.
+\]
+
+If seventeen unit squares fit in a square of side \(s<S\), embed that smaller container strictly inside \(C\). Apply an arbitrarily small common translation so that no certificate atom lies on any packed-square boundary. The captured atom sets are then disjoint, giving
+
+\[
+17\le \sum_{i=1}^{17}\mu(Q_i)\le\mu(C)<17,
+\]
 
 a contradiction.
 
-## Finite reduction
+Thus it is enough to verify the two certificate properties at \(S=9141/2000\).
 
-By dihedral symmetry, orientations reduce to `0<=theta<=pi/4`. Set `t=tan(theta/2)`. The combinatorial overlay of atom-capture rectangles in rotated center space and the feasible-center square changes only at roots of three explicitly generated families of integer polynomials of degree at most four.
+## Exact certificate
 
-The support generates 736,703 primitive event polynomials. Integer Bernstein coefficients on `[0,83/200]` prove that 648,661 have no root on the open physical interval `(0,sqrt(2)-1)` (a discarded polynomial may still vanish at `t=0`; that orientation has its own dedicated audit). Exact Sturm sequences applied to the remaining 88,042 polynomials prove there are exactly 87,032 distinct interior roots and therefore 87,033 open orientation cells. The derivation that these three families exhaust every orientation at which the audited combinatorial structure can change — so that the audited property is constant on each open cell — is written out in `EVENTS.md`.
+The measure has 71 representatives under the dihedral symmetry group of the container and 560 expanded atoms. Coordinates are multiples of \(1/4000\). All weights have denominator \(10^{12}\).
 
-At one exact rational `t` inside each cell, the segment-tree coverage verifier constructs all transformed atom rectangles with arbitrary-precision integers. It sweeps their x-boundaries, maintains exact y-coverage by range additions, enumerates every maximal run whose coverage is below one, and proves each such run is strictly separated from the feasible-center square by one of four separating axes. Both endpoint orientations are checked separately in exact arithmetic.
+The exact total mass is
 
-Event orientations follow by a closure argument with two load-bearing ingredients. First, the feasible-center square `[h,457/100-h]^2`, `h=(cos theta+sin theta)/2`, shrinks as `theta` grows on `[0,pi/4]`, so a center feasible at an event orientation is feasible throughout the open cell immediately to its left. Second, capture is upper semicontinuous for closed squares with nonnegative weights: an atom outside the closed square at the event orientation is eventually outside along any left approach, so `mu(Q) >= 1` on the left cell passes to the limit. The left-sided approach is mandatory — feasibility can be lost on the right — and it is all the argument uses. See `EVENTS.md` for the full statement.
+\[
+\mu(C)=\frac{16994734834452}{10^{12}}
+      =\frac{4248683708613}{250000000000}
+      =16.994734834452<17.
+\]
+
+The exact slack is
+
+\[
+17-\mu(C)=\frac{1316291387}{250000000000}
+          =0.005265165548.
+\]
+
+## Center-space reduction
+
+By square and container symmetry it suffices to consider
+
+\[
+0\le\theta\le\frac\pi4.
+\]
+
+For an atom \(p=(p_x,p_y)\), rotate coordinates by \(-\theta\):
+
+\[
+u_p=p_x\cos\theta+p_y\sin\theta,
+\qquad
+v_p=-p_x\sin\theta+p_y\cos\theta.
+\]
+
+A unit square with rotated center \((u,v)\) captures \(p\) precisely when
+
+\[
+|u-u_p|\le\frac12,
+\qquad
+|v-v_p|\le\frac12.
+\]
+
+Thus each atom contributes its weight on an axis-aligned unit rectangle in center space. Coverage is constant on every open cell of the resulting rectangular arrangement. The feasible centers form the rotated image of
+
+\[
+\left[\rho(\theta),S-\rho(\theta)\right]^2,
+\qquad
+\rho(\theta)=\frac{\cos\theta+\sin\theta}{2}.
+\]
+
+## Finite orientation partition
+
+The arrangement can change only when an atom boundary swaps order with another atom boundary or meets a boundary feature of the feasible-center square. After scaling coordinates by 4000, every event equation has the form
+
+\[
+A_0+A_c\cos\theta+A_s\sin\theta
+ +A_2\cos2\theta+B_2\sin2\theta=0
+\]
+
+with integer coefficients.
+
+Under
+
+\[
+t=\tan(\theta/2),
+\]
+
+multiplication by \((1+t^2)^2\) yields an integer polynomial of degree at most four.
+
+The generator produces exactly 1,344,862 primitive event polynomials. An exact Bernstein-sign test on
+
+\[
+0\le t\le83/200
+\]
+
+proves that 1,194,331 have no relevant interior root. Exact Sturm sequences for the remaining 150,531 polynomials produce 148,936 distinct interior algebraic event roots. Exact polynomial gcds prove that all polynomial roots assigned to one gap are the same algebraic number.
+
+There are therefore 148,937 open orientation cells.
+
+## Exact coverage audit
+
+One exact rational \(t=p/q\) is chosen in every open orientation cell. Then
+
+\[
+\cos\theta=\frac{q^2-p^2}{q^2+p^2},
+\qquad
+\sin\theta=\frac{2pq}{q^2+p^2},
+\]
+
+so all transformed atom boundaries, feasible-center boundaries, and separating-axis calculations become integers after a common scaling.
+
+For each sample, the verifier:
+
+1. constructs all center-space rectangle boundaries exactly;
+2. accumulates coverage by exact integer range additions;
+3. merges all vertically adjacent cells with coverage below \(10^{12}\);
+4. proves each such rectangle is strictly outside the feasible-center diamond by one of four exact separating-axis inequalities.
+
+The audit checks all 148,937 cells and 278,950,150 maximal subthreshold runs. No subthreshold run intersects the feasible region.
+
+## Endpoints and event orientations
+
+The orientations \(\theta=0\) and \(\theta=\pi/4\) are checked separately with exact integer and quadratic-integer arithmetic. The minimum axis-aligned open-cell coverage is
+
+\[
+1.000300000011.
+\]
+
+At \(\theta=\pi/4\), all 700 subthreshold runs lie outside the feasible-center diamond.
+
+At an event angle, a closed unit square can gain atoms lying on its capture boundary but cannot lose atoms relative to the appropriate neighboring open-cell limit. Feasible event configurations are also limits of feasible configurations in adjacent orientation cells. Thus the open-cell audit plus endpoint checks covers the full closed orientation interval.
+
+## Conclusion
+
+The exact measure has mass below 17 and every contained unit square has mass at least 1. By the weighted obstruction lemma,
+
+\[
+\boxed{s(17)\ge4.5705}.
+\]

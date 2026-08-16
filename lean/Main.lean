@@ -1,5 +1,5 @@
 /-
-Benchmark executable: runs the Lean coverage checker over all 87,033
+Benchmark executable: runs the Lean coverage checker over all 148,937
 orientation samples and reports timing. This is NOT a proof (use
 FullTheorem.lean for that); it exists to measure full-replay feasibility.
 
@@ -16,8 +16,8 @@ open Square17
 
 def main (args : List String) : IO Unit := do
   let limit := match args with
-    | [n] => (n.toNat?).getD 87033
-    | _ => 87033
+    | [n] => (n.toNat?).getD 148937
+    | _ => 148937
   let samples := parseSamples sampleFullData
   IO.println s!"atoms={atoms.size} samples={samples.size} running={min limit samples.size}"
   if !(certOK atoms) then

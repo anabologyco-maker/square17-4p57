@@ -1,18 +1,18 @@
 /-
-Exact checkers for the finite computation layer of the s(17) >= 4.57 proof.
+Exact checkers for the finite computation layer of the s(17) >= 4.5705 proof.
 
 Everything is unbounded-integer arithmetic (`Int` is GMP-backed). Each checker
 returns `Bool`; the theorems in `Theorems.lean` evaluate them by `native_decide`.
 
-Geometry conventions (independently derived; see ../docs/EVENTS.md):
-- Container C = [0, 457/100]^2, atom grid 1/400, so container = [0,1828]^2 in
-  grid units and the container center is (914, 914).
+Geometry conventions (independently derived; see ../docs/PROOF.md):
+- Container C = [0, 9141/2000]^2, atom grid 1/4000, so container = [0,18282]^2
+  in grid units and the container center is (9141, 9141).
 - Orientation t = tan(theta/2) = p/q gives d = p^2+q^2, cos = (q^2-p^2)/d,
   sin = 2pq/d, all exact rationals.
 - In the rotated center frame u = R_{-theta} c, the centers capturing atom a
   form the closed axis-aligned unit square centered at R_{-theta} a; the
   feasible centers form the rotated square ("diamond") image of
-  [h, 457/100-h]^2, h = (cos+sin)/2. Scaling by 40000*d^2 makes every
+  [h, 9141/2000-h]^2, h = (cos+sin)/2. Scaling by 8000000*d^2 makes every
   coordinate an integer.
 -/
 
@@ -20,7 +20,7 @@ import Square17.Basic
 
 namespace Square17
 
-def massTarget : Int := 16998202682064
+def massTarget : Int := 16994734834452
 def coverTarget : Int := 1000000000000
 
 /-! ## Certificate arithmetic -/
@@ -30,14 +30,14 @@ def weightAt (atoms : Array Atom) (x y : Int) : Int := Id.run do
     if a.x == x && a.y == y then return a.w
   return -1
 
-/-- 408 atoms on the [0,1828]^2 grid, nonnegative weights, no duplicate
+/-- 560 atoms on the [0,18282]^2 grid, nonnegative weights, no duplicate
 coordinates, exact D4 symmetry of the weighted set, exact total mass, and
 mass strictly below 17. -/
 def certOK (atoms : Array Atom) : Bool := Id.run do
-  if atoms.size != 408 then return false
+  if atoms.size != 560 then return false
   let mut mass : Int := 0
   for a in atoms do
-    if a.w < 0 || a.x < 0 || a.x > 1828 || a.y < 0 || a.y > 1828 then
+    if a.w < 0 || a.x < 0 || a.x > 18282 || a.y < 0 || a.y > 18282 then
       return false
     mass := mass + a.w
   if mass != massTarget || mass >= 17 * coverTarget then return false
@@ -47,7 +47,7 @@ def certOK (atoms : Array Atom) : Bool := Id.run do
       if atoms[i]!.x == atoms[j]!.x && atoms[i]!.y == atoms[j]!.y then
         return false
   -- D4 symmetry about the container center, weights constant on orbits
-  let k : Int := 1828
+  let k : Int := 18282
   for a in atoms do
     let images := #[(k - a.x, a.y), (a.x, k - a.y), (k - a.x, k - a.y),
                     (a.y, a.x), (k - a.y, a.x), (a.y, k - a.x), (k - a.y, k - a.x)]
@@ -57,20 +57,20 @@ def certOK (atoms : Array Atom) : Bool := Id.run do
 
 /-! ## theta = 0 endpoint
 
-Feasible centers are [1/2, 457/100 - 1/2]^2 = [200, 1628]^2 in grid units;
-capture squares are atom +- 200. Every open cell of the edge grid inside the
+Feasible centers are [1/2, 9141/2000 - 1/2]^2 = [2000, 16282]^2 in grid units;
+capture squares are atom +- 2000. Every open cell of the edge grid inside the
 feasible box must have coverage >= coverTarget (the box itself is the feasible
 region, so no separation test is needed). -/
 
 def theta0OK (atoms : Array Atom) : Bool := Id.run do
-  let lo : Int := 200
-  let hi : Int := 1628
+  let lo : Int := 2000
+  let hi : Int := 16282
   let mut xsR : Array Int := #[lo, hi]
   let mut ysR : Array Int := #[lo, hi]
   for a in atoms do
-    for e in #[a.x - 200, a.x + 200] do
+    for e in #[a.x - 2000, a.x + 2000] do
       if lo <= e && e <= hi then xsR := xsR.push e
-    for e in #[a.y - 200, a.y + 200] do
+    for e in #[a.y - 2000, a.y + 2000] do
       if lo <= e && e <= hi then ysR := ysR.push e
   let xs := sortedDedup xsR
   let ys := sortedDedup ysR
@@ -80,9 +80,9 @@ def theta0OK (atoms : Array Atom) : Bool := Id.run do
     -- 1D diff array over ys for this strip
     let mut diff : Array Int := .replicate (ny + 1) 0
     for a in atoms do
-      if a.x - 200 <= xs[i]! && xs[i+1]! <= a.x + 200 then
-        match (if a.y - 200 <= lo then some 0 else exactIdx ys (a.y - 200)),
-              (if a.y + 200 >= hi then some ny else exactIdx ys (a.y + 200)) with
+      if a.x - 2000 <= xs[i]! && xs[i+1]! <= a.x + 2000 then
+        match (if a.y - 2000 <= lo then some 0 else exactIdx ys (a.y - 2000)),
+              (if a.y + 2000 >= hi then some ny else exactIdx ys (a.y + 2000)) with
         | some bIdx, some tIdx =>
           if bIdx < tIdx then
             diff := diff.set! bIdx (diff[bIdx]! + a.w)
@@ -96,10 +96,10 @@ def theta0OK (atoms : Array Atom) : Bool := Id.run do
 
 /-! ## theta = pi/4 endpoint, exact Z[sqrt 2] arithmetic
 
-Frame U = 400*sqrt(2)*u, V = 400*sqrt(2)*v: atom capture squares become boxes
-with centers (X+Y, Y-X) and half-width 200*sqrt(2). The feasible diamond has
-vertices (400*sqrt2, 0), (3656-400*sqrt2, 0), (1828, +-(1828-400*sqrt2)); its
-edge normals are (1,+-1). -/
+Frame U = 4000*sqrt(2)*u, V = 4000*sqrt(2)*v: atom capture squares become boxes
+with centers (X+Y, Y-X) and half-width 2000*sqrt(2). The feasible diamond has
+vertices (4000*sqrt2, 0), (36564-4000*sqrt2, 0), (18282, +-(18282-4000*sqrt2));
+its edge normals are (1,+-1). -/
 
 structure Quad where  -- a + b * sqrt 2
   a : Int
@@ -148,9 +148,9 @@ def exactIdxQ (xs : Array Quad) (v : Quad) : Option Nat := Id.run do
 /-- Separating-axis test: does the closed box [xl,xr]x[yb,yt] meet the closed
 endpoint diamond? Axes: U, V, and the diamond normals (1,-1), (1,1). -/
 def quarterHits (xl xr yb yt : Quad) : Bool :=
-  let ext : Quad := ⟨1828, -400⟩
-  let du := Quad.sub (Quad.add xl xr) ⟨3656, 0⟩   -- 2*(center - diamond center U)
-  let dv := Quad.add yb yt                         -- diamond center V = 0
+  let ext : Quad := ⟨18282, -4000⟩
+  let du := Quad.sub (Quad.add xl xr) ⟨36564, 0⟩   -- 2*(center - diamond center U)
+  let dv := Quad.add yb yt                          -- diamond center V = 0
   let w := Quad.sub xr xl
   let h := Quad.sub yt yb
   let ext2 := Quad.add ext ext
@@ -161,12 +161,12 @@ def quarterHits (xl xr yb yt : Quad) : Bool :=
   Quad.sign g1 <= 0 && Quad.sign g2 <= 0 && Quad.sign g3 <= 0 && Quad.sign g4 <= 0
 
 def quarterOK (atoms : Array Atom) : Bool := Id.run do
-  let ext : Quad := ⟨1828, -400⟩
-  let minU : Quad := ⟨0, 400⟩
-  let maxU : Quad := ⟨3656, -400⟩
+  let ext : Quad := ⟨18282, -4000⟩
+  let minU : Quad := ⟨0, 4000⟩
+  let maxU : Quad := ⟨36564, -4000⟩
   let minV : Quad := Quad.neg ext
   let maxV : Quad := ext
-  let half : Quad := ⟨0, 200⟩
+  let half : Quad := ⟨0, 2000⟩
   let mut xsR : Array Quad := #[minU, maxU]
   let mut ysR : Array Quad := #[minV, maxV]
   for a in atoms do
@@ -212,7 +212,7 @@ def quarterOK (atoms : Array Atom) : Bool := Id.run do
 
 /-! ## Interior rational orientations
 
-All coordinates scaled by 40000*d^2 (d = p^2+q^2), making every capture-square
+All coordinates scaled by 8000000*d^2 (d = p^2+q^2), making every capture-square
 edge and every diamond datum an exact integer. The diamond's separating axes
 are the frame axes and its own edge normals (cos, -sin), (sin, cos). -/
 
@@ -245,24 +245,24 @@ def checkSample (atoms : Array Atom) (p q : Int) : Bool := Id.run do
   let s := 2 * p * q
   let sum := c + s
   let dif := c - s
-  let tt := 457 * d - 100 * sum
+  let tt := 9141 * d - 2000 * sum
   if !(0 < tt && 0 < c && 0 < s && 0 < dif) then return false
   let f : Frame := {
     c := c, s := s
-    cu := 91400 * d * sum
-    cv := 91400 * d * dif
-    extent := 200 * tt * sum
-    proj := 400 * d * d * tt }
+    cu := 18282000 * d * sum
+    cv := 18282000 * d * dif
+    extent := 2000 * tt * sum
+    proj := 4000 * d * d * tt }
   let minU := f.cu - f.extent
   let maxU := f.cu + f.extent
   let minV := f.cv - f.extent
   let maxV := f.cv + f.extent
-  -- capture squares, scaled by 40000*d^2
+  -- capture squares, scaled by 8000000*d^2
   let rects : Array (Int × Int × Int × Int × Int) := atoms.map fun a =>
     let au := a.x * c + a.y * s
     let av := -a.x * s + a.y * c
-    (100 * d * (au - 200 * d), 100 * d * (au + 200 * d),
-     100 * d * (av - 200 * d), 100 * d * (av + 200 * d), a.w)
+    (2000 * d * (au - 2000 * d), 2000 * d * (au + 2000 * d),
+     2000 * d * (av - 2000 * d), 2000 * d * (av + 2000 * d), a.w)
   let mut xsR : Array Int := #[minU, maxU]
   let mut ysR : Array Int := #[minV, maxV]
   for (l, r, b, t, _) in rects do

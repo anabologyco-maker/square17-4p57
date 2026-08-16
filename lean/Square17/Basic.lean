@@ -1,5 +1,5 @@
 /-
-Basic data types and exact parsing for the s(17) >= 4.57 certificate.
+Basic data types and exact parsing for the s(17) >= 4.5705 certificate.
 
 Design rule: parsing failures produce *poisoned* values that make every
 downstream check return `false`. No malformed input can create a passing

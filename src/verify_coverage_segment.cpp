@@ -14,13 +14,13 @@
 
 namespace {
 using Integer=boost::multiprecision::cpp_int;
-constexpr int kGrid=400;
-constexpr int kSideNumerator=457;
-constexpr int kSideDenominator=100;
+constexpr int kGrid=4000;
+constexpr int kSideNumerator=9141;
+constexpr int kSideDenominator=2000;
 constexpr std::int64_t kCoverageTarget=1'000'000'000'000LL;
-constexpr std::size_t kExpectedAtoms=408;
-constexpr std::size_t kExpectedSamples=87033;
-constexpr std::int64_t kExpectedMass=16'998'202'682'064LL;
+constexpr std::size_t kExpectedAtoms=560;
+constexpr std::size_t kExpectedSamples=148937;
+constexpr std::int64_t kExpectedMass=16'994'734'834'452LL;
 struct Atom{int x,y;std::int64_t w;};
 struct Sample{Integer p,q;};
 struct Rect{Integer l,r,b,t;std::int64_t w;};
@@ -70,12 +70,9 @@ Audit audit(const Sample&z,const std::vector<Atom>&atoms){
 }
 }
 
-int main(int argc,char**argv){try{int threads=argc>1?std::stoi(argv[1]):8;std::string ap=argc>2?argv[2]:"atoms.csv",sp=argc>3?argv[3]:"samples.tsv";omp_set_num_threads(threads);auto atoms=load_atoms(ap);auto samples=load_samples(sp);int begin=argc>4?std::stoi(argv[4]):0;int end=argc>5?std::stoi(argv[5]):(int)samples.size();begin=std::max(0,begin);end=std::min((int)samples.size(),end);if(begin>=end)throw std::runtime_error("empty cell range");std::atomic<bool>ok(true);unsigned long long runs=0;long long gmin=std::numeric_limits<long long>::max();double start=omp_get_wtime();
-#pragma omp parallel for schedule(dynamic,1) reduction(+:runs) reduction(min:gmin)
+int main(int argc,char**argv){try{int threads=argc>1?std::stoi(argv[1]):8;std::string ap=argc>2?argv[2]:"atoms.csv",sp=argc>3?argv[3]:"samples.tsv";omp_set_num_threads(threads);auto atoms=load_atoms(ap);auto samples=load_samples(sp);int begin=argc>4?std::stoi(argv[4]):0;int end=argc>5?std::stoi(argv[5]):(int)samples.size();begin=std::max(0,begin);end=std::min((int)samples.size(),end);std::atomic<bool>ok(true);unsigned long long runs=0;long long gmin=std::numeric_limits<long long>::max();double start=omp_get_wtime();
  for(int i=begin;i<end;++i){if(!ok.load())continue;auto r=audit(samples[i],atoms);runs+=r.runs;gmin=std::min(gmin,(long long)r.mincov);if(!r.ok){ok=false;
-#pragma omp critical
- std::cerr<<"failure cell="<<i<<"\n";}if((i-begin)%100==0){
-#pragma omp critical
- std::cerr<<"progress="<<i<<" sec="<<(omp_get_wtime()-start)<<"\n";}}
+std::cerr<<"failure cell="<<i<<"\n";}if((i-begin)%100==0){
+std::cerr<<"progress="<<i<<" sec="<<(omp_get_wtime()-start)<<"\n";}}
  std::cout<<"cells="<<(end-begin)<<" runs="<<runs<<" min_arrangement_coverage="<<gmin<<" ok="<<ok.load()<<" seconds="<<(omp_get_wtime()-start)<<"\n";if(!ok.load())return 1;std::cout<<"EXACT SEGMENT COVERAGE PASS\n";return 0;
 }catch(const std::exception&e){std::cerr<<"error: "<<e.what()<<"\n";return 2;}}

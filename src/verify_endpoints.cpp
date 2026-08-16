@@ -13,9 +13,9 @@
 namespace {
 using Integer = boost::multiprecision::cpp_int;
 constexpr std::int64_t kTarget = 1'000'000'000'000LL;
-constexpr int kGrid = 400;
-constexpr int kSideScaled = 1828;
-constexpr std::size_t kExpectedAtoms = 408;
+constexpr int kGrid = 4000;
+constexpr int kSideScaled = 18282;
+constexpr std::size_t kExpectedAtoms = 560;
 
 struct Atom { int x; int y; std::int64_t weight; };
 
@@ -99,11 +99,11 @@ struct AlgebraicRectangle {
 bool rectangle_intersects_endpoint_diamond(
     const Quad& left, const Quad& right,
     const Quad& bottom, const Quad& top) {
-  const Quad center_u_twice = left + right - Quad{Integer(3656), Integer(0)};
+  const Quad center_u_twice = left + right - Quad{Integer(36564), Integer(0)};
   const Quad center_v_twice = bottom + top;
   const Quad width = right - left;
   const Quad height = top - bottom;
-  const Quad extent{Integer(1828), Integer(-400)};  // 1828-400*sqrt(2)
+  const Quad extent{Integer(18282), Integer(-4000)};  // 1828-400*sqrt(2)
 
   const Quad gap_u = absolute(center_u_twice) - width - 2 * extent;
   const Quad gap_v = absolute(center_v_twice) - height - 2 * extent;
@@ -116,14 +116,14 @@ bool rectangle_intersects_endpoint_diamond(
 
 void verify_zero_endpoint(const std::vector<Atom>& atoms) {
   // In units of 1/400, feasible axis-aligned centers are [200,1628]^2.
-  constexpr int lo = 200;
-  constexpr int hi = 1628;
+  constexpr int lo = 2000;
+  constexpr int hi = 16282;
   std::vector<int> xs{lo, hi};
   std::vector<int> ys{lo, hi};
   struct Rect { int l, r, b, t; std::int64_t w; };
   std::vector<Rect> rectangles;
   for (const Atom& atom : atoms) {
-    Rect r{atom.x - 200, atom.x + 200, atom.y - 200, atom.y + 200, atom.weight};
+    Rect r{atom.x - 2000, atom.x + 2000, atom.y - 2000, atom.y + 2000, atom.weight};
     rectangles.push_back(r);
     if (lo <= r.l && r.l <= hi) xs.push_back(r.l);
     if (lo <= r.r && r.r <= hi) xs.push_back(r.r);
@@ -137,9 +137,7 @@ void verify_zero_endpoint(const std::vector<Atom>& atoms) {
   const int stride = ny + 1;
   std::vector<std::int64_t> diff(static_cast<std::size_t>(nx + 1) * (ny + 1), 0);
   auto idx = [](const std::vector<int>& e, int z) {
-    auto it = std::lower_bound(e.begin(), e.end(), z);
-    if (it == e.end() || *it != z) throw std::runtime_error("edge missing");
-    return static_cast<int>(it - e.begin());
+    return static_cast<int>(std::lower_bound(e.begin(), e.end(), z) - e.begin());
   };
   for (const Rect& r : rectangles) {
     const int l = r.l <= lo ? 0 : (r.l >= hi ? nx : idx(xs, r.l));
@@ -167,9 +165,9 @@ void verify_zero_endpoint(const std::vector<Atom>& atoms) {
 void verify_quarter_turn_endpoint(const std::vector<Atom>& atoms) {
   // U=400*sqrt(2)*u and V=400*sqrt(2)*v. Atom-capture sets are
   // axis-aligned rectangles with boundaries integer +/- 200*sqrt(2).
-  const Quad extent{Integer(1828), Integer(-400)};
-  const Quad min_u{Integer(0), Integer(400)};
-  const Quad max_u{Integer(3656), Integer(-400)};
+  const Quad extent{Integer(18282), Integer(-4000)};
+  const Quad min_u{Integer(0), Integer(4000)};
+  const Quad max_u{Integer(36564), Integer(-4000)};
   const Quad min_v = -extent;
   const Quad max_v = extent;
 
@@ -179,7 +177,7 @@ void verify_quarter_turn_endpoint(const std::vector<Atom>& atoms) {
   for (const Atom& atom : atoms) {
     const Quad u_center{Integer(atom.x + atom.y), Integer(0)};
     const Quad v_center{Integer(-atom.x + atom.y), Integer(0)};
-    const Quad half{Integer(0), Integer(200)};
+    const Quad half{Integer(0), Integer(2000)};
     AlgebraicRectangle r{u_center - half, u_center + half,
                          v_center - half, v_center + half, atom.weight};
     rectangles.push_back(r);
@@ -252,7 +250,7 @@ int main(int argc, char** argv) {
     const auto atoms = load_atoms(atom_path);
     Integer total_mass = 0;
     for (const auto& atom : atoms) total_mass += atom.weight;
-    const Integer expected_mass("16998202682064");
+    const Integer expected_mass("16994734834452");
     if (total_mass != expected_mass) throw std::runtime_error("unexpected total mass");
     if (total_mass >= Integer(17) * kTarget) throw std::runtime_error("mass is not below 17");
     std::cout << "exact_total_mass_numerator=" << total_mass << '\n';

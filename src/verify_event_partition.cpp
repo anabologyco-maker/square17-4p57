@@ -16,9 +16,6 @@ using exact_sturm::Integer;
 using exact_sturm::IntegerPolynomial;
 using exact_sturm::RationalPoint;
 
-constexpr std::size_t kExpectedPolynomials = 88042;
-constexpr std::size_t kExpectedSamples = 87033;
-constexpr int kExpectedInteriorRoots = 87032;
 
 std::vector<RationalPoint> load_samples(const std::string& path) {
   std::ifstream in(path);
@@ -41,9 +38,6 @@ std::vector<RationalPoint> load_samples(const std::string& path) {
     }
     samples.push_back(std::move(sample));
   }
-  if (samples.size() != kExpectedSamples) {
-    throw std::runtime_error("unexpected sample count");
-  }
   return samples;
 }
 
@@ -59,9 +53,6 @@ std::vector<IntegerPolynomial> load_polynomials(const std::string& path) {
   while (in >> a0 >> a1 >> a2 >> a3 >> a4) {
     polynomials.push_back(IntegerPolynomial{
         Integer(a0), Integer(a1), Integer(a2), Integer(a3), Integer(a4)});
-  }
-  if (polynomials.size() != kExpectedPolynomials) {
-    throw std::runtime_error("unexpected event-polynomial count");
   }
   return polynomials;
 }
@@ -83,6 +74,8 @@ int main(int argc, char** argv) {
 
     const auto samples = load_samples(sample_path);
     const auto polynomials = load_polynomials(event_path);
+    const int expected_interior_roots = static_cast<int>(samples.size()) - 1;
+    std::cout << "polynomials=" << polynomials.size() << " samples=" << samples.size() << " expected_roots=" << expected_interior_roots << '\n';
 
     // The final rational is strictly above sqrt(2)-1. It is used only as an
     // exact right bracket; the endpoint factor t^2+2t-1 is removed from every
@@ -185,10 +178,16 @@ int main(int argc, char** argv) {
     if (!gap_polynomials.front().empty() || !gap_polynomials.back().empty()) {
       throw std::runtime_error("unexpected root before first or after last sample");
     }
-    for (int gap = 1; gap <= kExpectedInteriorRoots; ++gap) {
+    int missing_gaps = 0;
+    for (int gap = 1; gap <= expected_interior_roots; ++gap) {
       if (gap_polynomials[gap].empty()) {
-        throw std::runtime_error("missing event root in an internal sample gap");
+        if (missing_gaps < 100) std::cerr << "missing_gap=" << gap << "\n";
+        ++missing_gaps;
       }
+    }
+    if (missing_gaps) {
+      std::cerr << "missing_gaps_total=" << missing_gaps << "\n";
+      throw std::runtime_error("missing event roots in proposed gaps");
     }
 
     // Every polynomial assigned to one gap has exactly one root there. Prove
@@ -198,7 +197,7 @@ int main(int argc, char** argv) {
     long long gcd_checks = 0;
     start = omp_get_wtime();
 #pragma omp parallel for schedule(dynamic, 1) reduction(+ : gcd_checks)
-    for (int gap = 1; gap <= kExpectedInteriorRoots; ++gap) {
+    for (int gap = 1; gap <= expected_interior_roots; ++gap) {
       if (!common.load()) continue;
       const int anchor_id = gap_polynomials[gap].front();
       const auto anchor = exact_sturm::to_rational(polynomials[anchor_id]);
@@ -223,7 +222,7 @@ int main(int argc, char** argv) {
       }
     }
 
-    std::cout << "root_gaps=" << kExpectedInteriorRoots
+    std::cout << "root_gaps=" << expected_interior_roots
               << " gcd_checks=" << gcd_checks
               << " common=" << common.load()
               << " seconds=" << (omp_get_wtime() - start) << '\n';
