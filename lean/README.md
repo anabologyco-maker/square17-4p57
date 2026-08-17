@@ -18,7 +18,7 @@ inside Lean by a poisoned parser (malformed input can only cause checks to
 | `theta0_coverage_ok` | every open cell of the θ=0 arrangement inside the feasible box has coverage ≥ 10¹² | `verify_endpoints.cpp` (θ=0) | ✅ proved |
 | `quarter_turn_coverage_ok` | θ=π/4 audit in exact ℤ[√2]: every subthreshold run is separated from the feasible diamond | `verify_endpoints.cpp` (θ=π/4) | ✅ proved |
 | `sample_subset_coverage_ok` | the audited coverage property at a 152-sample subset of the 148,937 orientations | `verify_coverage_segment.cpp` (subset) | ✅ proved |
-| `sample_full_coverage_ok` | same at **all 148,937** audited orientations | `verify_coverage_segment.cpp` (full) | `FullTheorem.lean`, ~12 h single-threaded `native_decide` build |
+| `sample_full_coverage_ok` | same at **all 148,937** audited orientations | `verify_coverage_segment.cpp` (full) | ✅ proved (`FullTheorem.lean`; 8.5 h single-threaded `native_decide` build, measured on a 4-core EPYC-Milan VM) |
 
 Build the default target (fast, includes the first four theorems; ~30 s):
 
@@ -29,9 +29,9 @@ lake build Square17
 **Do not remove `precompileModules` from the lakefile.** `native_decide` only
 calls natively compiled code for modules built into shared libraries; without
 that setting the checkers run in Lean's interpreter at roughly 100× slower
-(the full-set theorem goes from ~12 hours to ~2 months of CPU, and even the
-default target takes an hour). This applied silently to the 4.57 release's
-Lean layer, whose full-set build time was estimated, not measured.
+(the full-set theorem goes from 8.5 hours, measured, to months of CPU, and
+even the default target takes an hour). This applied silently to the 4.57
+release's Lean layer, whose full-set build time was estimated, not measured.
 
 Build the full-coverage theorem (single-threaded replay of the entire audit):
 

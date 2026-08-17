@@ -16,7 +16,7 @@ fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3  ./lean/.gitign
 cec827d9d59dccc205e3f4f7e88ae76169497bd592052e956aa22879afce3f66  ./lean/lake-manifest.json
 302cd63c54178885b89e669f33b38f12f4dd7ae7e5cac537b3203e3768d8fb2b  ./lean/lean-toolchain
 52c9321637f4bd261d9575b69974ca6f1dd712fe0dee06b2cc63945d980a7b5d  ./lean/Main.lean
-717eb274fa3ce45209b4321f6d2aedba0aaf6928cd785e993c5d51202e6bdad8  ./lean/README.md
+f7fffbcf091cc4766d575fd680dfdd8cd8048defce526843d071873d660c784e  ./lean/README.md
 35ba47e23eedd4d8236cc9324f1c0c5349b0ceba00b2d7893fcae4a75c70b36c  ./lean/scripts/gen_data.py
 3d49b8ea4ca1798e1fb85bbd15a5ce6576318d7a1c9da09607ae9b6e0c5f3a9f  ./lean/Square17/AtomData.lean
 aacae807959f3858985973353696cf616cb105ecc140ec30f7229599a9b43420  ./lean/Square17/Basic.lean
